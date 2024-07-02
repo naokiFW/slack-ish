@@ -7,7 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id      Int    @id @default(autoincrement())
+model Msg {
+  id      Int    @id
+  senttime DateTime @default(now())
+  name String 
   message String
+  stamp Int
 }
