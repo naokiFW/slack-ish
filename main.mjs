@@ -81,4 +81,25 @@ app.post("/send_main", async (request, response) => {
   response.redirect("/");
 });
 
+app.post("/send_thread", async (request, response) => {
+  const message_num = (await prisma.post.findMany({
+    where: {
+      channel: current_channel,
+      message: current_message
+    }
+  })).length;
+
+  await prisma.post.create({
+    data: {
+      channel: current_channel,
+      message: current_message,
+      thread: message_num,
+      name: name,
+      text: request.body.message,
+      stamps: [],
+    },
+  });
+  response.redirect("/");
+});
+
 app.listen(3000);
