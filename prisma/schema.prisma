@@ -7,10 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Member {
+  id    Int     @id @default(autoincrement())
+  name  String
+}
 model Msg {
-  id      Int    @id
-  senttime DateTime @default(now())
-  name String 
-  message String
-  stamp Int
+  id        Int       @id @default(autoincrement())
+  channel   Int
+  message   Int
+  thread    Int
+  sentTime  DateTime  @default(now())
+  name      String 
+  text      String
+  stamps    Int[]
+}
+
+model Stamp {
+  id    Int     @id @default(autoincrement())
+  name  String
+}
+
+model Channel {
+  id    Int     @id @default(autoincrement())
+  name  String
 }
