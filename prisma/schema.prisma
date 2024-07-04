@@ -20,6 +20,7 @@ model Msg {
   name      String 
   text      String
   stamps    Int[]
+  reply     Int
 }
 
 model Stamp {
