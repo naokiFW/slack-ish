@@ -1,18 +1,32 @@
-.channel{
-  background:#fcc;
-}
 .chat {
-  background: #fea;
+  background: #fcc;
+  margin: 10px 0;
 }
 .thread {
-  background: red;
+  background: #fea;
 }
-
-.channel,
+.channel {
+  background: #afd;
+}
 .chat,
-.thread
- {
+.thread,
+.channel {
   padding: 2%;
   border-radius: 10px
 }
- 
+
+@media ( min-width : 600px ){
+  .flexbox {
+    display: -webkit-flex;
+    display: flex;
+  }
+  .chat {
+    margin: 0 10px;
+    -webkit-flex: 2;
+    flex: 2;
+  }
+  .thread {
+    -webkit-flex: 1;
+    flex: 1;
+  }
+}
