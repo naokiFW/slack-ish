@@ -1,3 +1,18 @@
-.app-title {
-  color: #ff0000;
+.channel{
+  background:#fcc;
 }
+.chat {
+  background: #fea;
+}
+.thread {
+  background: red;
+}
+
+.channel,
+.chat,
+.thread
+ {
+  padding: 2%;
+  border-radius: 10px
+}
+ 
