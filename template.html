@@ -6,14 +6,28 @@
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <h1 class="app-title">チャット</h1>
-    <ul>
-      <!-- posts -->
-    </ul>
-    <form action="/send" method="post">
-      <input id="message-input" type="text" name="message" />
-      <button type="submit">送信</button>
-    </form>
+    <div class="flexbox">
+      <section class="channel">
+        <h1>チャンネル</h1>
+        
+      </section>
+      <section class="chat">
+        <h1>チャット</h1>
+        <form action="/send_main" method="post">
+          <input id="message-input" type="text" name="message" />
+          <button type="submit">送信</button>
+        </form>
+      </section>
+
+      <section class="thread">
+        <h1>スレッド</h1>
+        <form action="/send_thread" method="post">
+          <input id="message-input" type="text" name="message" />
+          <button type="submit">送信</button>
+        </form>
+      </section>
+    </div>
     <script src="/script.js"></script>
   </body>
 </html>
+
