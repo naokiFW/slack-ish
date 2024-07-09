@@ -30,3 +30,24 @@
     flex: 1;
   }
 }
+
+.divide_thread {
+  color: gray;
+  font-size: small;
+  border-bottom: 1px solid gray;
+}
+.member {
+  font-weight: bold;
+  font-size: small;
+}
+
+.time {
+  color: gray;
+  font-size: x-small;
+}
+
+.reply {
+  font-size: small;
+  font-weight: bold;
+  color: blue;
+}

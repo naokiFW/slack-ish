@@ -99,6 +99,11 @@ app.get("/", async (request, response) => {
       return stamp_spans;
     }
   );
+
+  if (all_thread_msg[0].reply > 0) {
+    thread_msgs += `<div class="divide_thread">${all_thread_msg[0].reply}件の返信</div>`;
+  }
+
   all_thread_msg.splice(0, 1);
   thread_msgs += all_thread_msg.map( (msg) =>
     template_thread_msg.replace(
