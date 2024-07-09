@@ -1,3 +1,7 @@
+html, body {
+  height: 99%;
+}
+
 .chat {
   background: #fcc;
   margin: 10px 0;
@@ -31,10 +35,16 @@
   }
 }
 
+.main_msgs, .thread_msgs {
+  height: 80%;
+  overflow: auto;
+}
+
 .divide_thread {
   color: gray;
   font-size: small;
-  border-bottom: 1px solid gray;
+  margin-top: 0.5em;
+  border-top: 1px solid gray;
 }
 .member {
   font-weight: bold;
