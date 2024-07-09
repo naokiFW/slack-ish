@@ -131,13 +131,13 @@ app.get("/", async (request, response) => {
 });
 
 app.post("/send_main", async (request, response) => {
-  const message_num = (await prisma.post.findMany({
+  const message_num = (await prisma.msg.findMany({
     where: {
       channel: current_channel
     }
   })).length;
 
-  await prisma.post.create({
+  await prisma.msg.create({
     data: {
       channel: current_channel,
       message: message_num,
@@ -145,20 +145,21 @@ app.post("/send_main", async (request, response) => {
       name: name,
       text: request.body.message,
       stamps: [],
+      reply: 0,
     },
   });
   response.redirect("/");
 });
 
 app.post("/send_thread", async (request, response) => {
-  const message_num = (await prisma.post.findMany({
+  const message_num = (await prisma.msg.findMany({
     where: {
       channel: current_channel,
       message: current_message
     }
   })).length;
 
-  await prisma.post.create({
+  await prisma.msg.create({
     data: {
       channel: current_channel,
       message: current_message,
@@ -166,6 +167,7 @@ app.post("/send_thread", async (request, response) => {
       name: name,
       text: request.body.message,
       stamps: [],
+      reply: 0,
     },
   });
   response.redirect("/");
