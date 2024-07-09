@@ -45,8 +45,8 @@ app.get("/", async (request, response) => {
     ).replace(
       "<!-- stamp -->",
       () => {
-        stamp_spans = "";
-        stamp_exitst = false;
+        var stamp_spans = "";
+        var stamp_exitst = false;
         for (let i = 0; i < 32; i++) {
           if (msg.stamps[i] > 0) {
             stamp_spans += `<span class="stamp"><img class="stamp_img" src="./images/stamp${i}"/> ${img.stamps[i]}</span>`;
@@ -76,8 +76,8 @@ app.get("/", async (request, response) => {
   ).replace(
     "<!-- stamp -->",
     () => {
-      stamp_spans = "";
-      stamp_exitst = false;
+      var stamp_spans = "";
+      var stamp_exitst = false;
       for (let i = 0; i < 32; i++) {
         if (all_thread_msg[0].stamps[i] > 0) {
           stamp_spans += `<span class="stamp"><img class="stamp_img" src="./images/stamp${i}"/> ${img.stamps[i]}</span>`;
@@ -103,8 +103,8 @@ app.get("/", async (request, response) => {
     ).replace(
       "<!-- stamp -->",
       () => {
-        stamp_spans = "";
-        stamp_exitst = false;
+        var stamp_spans = "";
+        var stamp_exitst = false;
         for (let i = 0; i < 32; i++) {
           if (msg.stamps[i] > 0) {
             stamp_spans += `<span class="stamp"><img class="stamp_img" src="./images/stamp${i}"/> ${img.stamps[i]}</span>`;
