@@ -3,6 +3,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import escapeHTML from "escape-html";
 import { channel } from "node:diagnostics_channel";
+import { quicksort } from "./sort.mjs";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -18,27 +19,28 @@ const template_main_msg = fs.readFileSync("./main_message.html", "utf8");
 const template_thread_msg = fs.readFileSync("./thread_message.html", "utf-8");
 
 app.get("/", async (request, response) => {
-  const all_main_msg = await prisma.msg.findMany({
+  var all_main_msg = await prisma.msg.findMany({
     where: {
       channel: current_channel,
       thread: 0
     }
   });
 
-  const all_thread_msg = await prisma.msg.findMany({
+  var all_thread_msg = await prisma.msg.findMany({
     where: {
       channel: current_channel,
       message: current_message
     }
   });
 
-  const main_msgs = all_main_msg.map( (msg) => 
+  
+  const main_msgs = quicksort(0, all_main_msg.length - 1, all_main_msg).map( (msg) => 
     template_main_msg.replace(
       "<!-- member -->",
       msg.name
     ).replace(
       "<!-- sentTime -->",
-      msg.sentTime
+      msg.sentTime.toLocaleString()
     ).replace(
       "<!-- text -->",
       msg.text
@@ -60,16 +62,23 @@ app.get("/", async (request, response) => {
       }
     ).replace(
       "<!-- reply -->",
-      msg.reply
+      () => {
+        if (msg.reply > 0) {
+          return `${msg.reply}件の返信`;
+        } else {
+          return "";
+        }
+      }
     )
   ).join("");
   
+  all_thread_msg = quicksort(0, all_thread_msg.length - 1, all_thread_msg);
   var thread_msgs = template_main_msg.replace(
     "<!-- member -->",
     all_thread_msg[0].name
   ).replace(
     "<!-- sentTime -->",
-    all_thread_msg[0].sentTime
+    all_thread_msg[0].sentTime.toLocaleString()
   ).replace(
     "<!-- text -->",
     all_thread_msg[0].text
@@ -90,13 +99,14 @@ app.get("/", async (request, response) => {
       return stamp_spans;
     }
   );
+  all_thread_msg.splice(0, 1);
   thread_msgs += all_thread_msg.map( (msg) =>
     template_thread_msg.replace(
       "<!-- member -->",
       msg.name
     ).replace(
       "<!-- sentTime -->",
-      msg.sentTime
+      msg.sentTime.toLocaleString()
     ).replace(
       "<!-- text -->",
       msg.text
@@ -148,6 +158,7 @@ app.post("/send_main", async (request, response) => {
       reply: 0,
     },
   });
+  
   response.redirect("/");
 });
 
@@ -169,6 +180,18 @@ app.post("/send_thread", async (request, response) => {
       stamps: [],
       reply: 0,
     },
+  });
+  await prisma.msg.updateMany({
+    where: {
+      AND: [
+        {channel: current_channel},
+        {message: current_message},
+        {thread: 0}
+      ]
+    },
+    data: {
+      reply: message_num
+    }
   });
   response.redirect("/");
 });
