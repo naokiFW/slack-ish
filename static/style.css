@@ -5,6 +5,7 @@ html, body {
 .chat {
   background: #fcc;
   margin: 10px 0;
+  z-index: 2;
 }
 .thread {
   background: #fea;
@@ -53,7 +54,9 @@ html, body {
   background-color: rgba(0, 0, 0, 0.05);
 }
 .parent_msg {
-  padding: 5px;
+  padding: 3px;
+  position: relative;
+  overflow: visible;
 }
 .parent_msg:hover {
   background-color: rgba(0, 0, 0, 0.05);
@@ -97,4 +100,18 @@ html, body {
   outline: none;
   padding: 0;
   appearance: none;
+}
+
+.control {
+  display: none;
+  width: 100px;
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 0;
+  background-color: red;
+}
+
+.parent_msg:hover .control {
+  display: inline-block;
 }
