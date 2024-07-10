@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import express from "express";
+import express, { response } from "express";
 import { PrismaClient } from "@prisma/client";
 import escapeHTML from "escape-html";
 import { channel } from "node:diagnostics_channel";
@@ -36,7 +36,23 @@ app.get("/", async (request, response) => {
     }
   });
 
-  
+  if (all_main_msg.length === 0) {
+    const html = template.replace(
+      "<!-- channels -->",
+      all_channels.map( (channel) =>
+        `<button class="ch" onclick="change_ch(${channel.id})">#${channel.name}</button>`
+      ).join("")
+    ).replace(
+      "<!-- channel name -->",
+      `#${all_channels[current_channel - 1].name}`
+    ).replace(
+      "<!-- main_msgs -->",
+      "このチャンネルにはメッセージがありません"
+    );
+
+    response.send(html);
+    return;
+  }
   const main_msgs = quicksort(0, all_main_msg.length - 1, all_main_msg).map( (msg) => 
     template_main_msg.replace(
       "<!-- msg_id -->",
@@ -146,8 +162,11 @@ app.get("/", async (request, response) => {
   const html = template.replace(
     "<!-- channels -->",
     all_channels.map( (channel) =>
-      `<div class="channels">#${channel.name}</div>`
+      `<button class="ch" onclick="change_ch(${channel.id})">#${channel.name}</button>`
     ).join("")
+  ).replace(
+    "<!-- channel name -->",
+    `#${all_channels[current_channel - 1].name}`
   ).replace(
     "<!-- main_msgs -->",
     main_msgs
@@ -212,6 +231,12 @@ app.post("/send_thread", async (request, response) => {
       reply: message_num
     }
   });
+  response.redirect("/");
+});
+
+app.post("/change_ch", (request, response) => {
+  current_channel = Number(request.body.ch_id);
+  current_message = 0; //適当
   response.redirect("/");
 });
 
