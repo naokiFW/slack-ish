@@ -10,8 +10,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("static"));
 const prisma = new PrismaClient();
 
+
 var current_channel = 1;
-var current_message = 0;
+var current_message = Array(10); //適当
+current_message.fill(0);
 var name = "akema";
 
 const template = fs.readFileSync("./template.html", "utf-8");
@@ -32,7 +34,7 @@ app.get("/", async (request, response) => {
   var all_thread_msg = await prisma.msg.findMany({
     where: {
       channel: current_channel,
-      message: current_message
+      message: current_message[current_channel - 1]
     }
   });
 
@@ -204,14 +206,14 @@ app.post("/send_thread", async (request, response) => {
   const message_num = (await prisma.msg.findMany({
     where: {
       channel: current_channel,
-      message: current_message
+      message: current_message[current_channel - 1]
     }
   })).length;
 
   await prisma.msg.create({
     data: {
       channel: current_channel,
-      message: current_message,
+      message: current_message[current_channel - 1],
       thread: message_num,
       name: name,
       text: request.body.message,
@@ -223,7 +225,7 @@ app.post("/send_thread", async (request, response) => {
     where: {
       AND: [
         {channel: current_channel},
-        {message: current_message},
+        {message: current_message[current_channel - 1]},
         {thread: 0}
       ]
     },
@@ -236,12 +238,12 @@ app.post("/send_thread", async (request, response) => {
 
 app.post("/change_ch", (request, response) => {
   current_channel = Number(request.body.ch_id);
-  current_message = 0; //適当
+  // current_message[current_channel - 1] = 0; //適当
   response.redirect("/");
 });
 
 app.post("/change_msg", (request, response) => {
-  current_message = Number(request.body.msg_id);
+  current_message[current_channel - 1] = Number(request.body.msg_id);
   response.redirect("/");
 });
 
