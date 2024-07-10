@@ -19,6 +19,9 @@ const template_main_msg = fs.readFileSync("./main_message.html", "utf8");
 const template_thread_msg = fs.readFileSync("./thread_message.html", "utf-8");
 
 app.get("/", async (request, response) => {
+  var all_channels = await prisma.channel.findMany();
+  all_channels = quicksort(0, all_channels.length - 1, all_channels);
+
   var all_main_msg = await prisma.msg.findMany({
     where: {
       channel: current_channel,
@@ -141,6 +144,11 @@ app.get("/", async (request, response) => {
   ).join("");
 
   const html = template.replace(
+    "<!-- channels -->",
+    all_channels.map( (channel) =>
+      `<div class="channels">#${channel.name}</div>`
+    ).join("")
+  ).replace(
     "<!-- main_msgs -->",
     main_msgs
   ).replace(
