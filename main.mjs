@@ -36,6 +36,9 @@ app.get("/", async (request, response) => {
   
   const main_msgs = quicksort(0, all_main_msg.length - 1, all_main_msg).map( (msg) => 
     template_main_msg.replace(
+      "<!-- msg_id -->",
+      msg.message
+    ).replace(
       "<!-- member -->",
       msg.name
     ).replace(
@@ -64,7 +67,7 @@ app.get("/", async (request, response) => {
       "<!-- reply -->",
       () => {
         if (msg.reply > 0) {
-          return `${msg.reply}件の返信`;
+          return `<button class="reply" onclick="change_msg(${msg.message})">${msg.reply}件の返信</button>`;
         } else {
           return "";
         }
@@ -74,6 +77,9 @@ app.get("/", async (request, response) => {
   
   all_thread_msg = quicksort(0, all_thread_msg.length - 1, all_thread_msg);
   var thread_msgs = template_main_msg.replace(
+    "<!-- msg_id -->",
+    all_thread_msg[0].message
+  ).replace(
     "<!-- member -->",
     all_thread_msg[0].name
   ).replace(
@@ -198,6 +204,11 @@ app.post("/send_thread", async (request, response) => {
       reply: message_num
     }
   });
+  response.redirect("/");
+});
+
+app.post("/change_msg", (request, response) => {
+  current_message = Number(request.body.msg_id);
   response.redirect("/");
 });
 
