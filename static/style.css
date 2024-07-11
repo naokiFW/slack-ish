@@ -122,3 +122,16 @@ html, body {
 .child_msg:hover .control {
   display: inline-block;
 }
+
+.stamp_box {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 35%;
+
+  width: 30%;
+  height: 40%;
+
+  background-color: gray;
+  z-index: 999;
+}
