@@ -57,13 +57,13 @@ html, body {
 .parent_msg {
   padding: 3px;
   position: relative;
-  overflow: visible;
 }
 .parent_msg:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
 .child_msg {
   padding: 0 5px 0 5px;
+  position: relative;
 }
 .child_msg:hover {
   background-color: rgba(0, 0, 0, 0.05);
@@ -105,14 +105,20 @@ html, body {
 
 .control {
   display: none;
-  width: 100px;
+  /* width: 100px; */
+  padding: 3px;
+  border-radius: 6px;
   position: absolute;
   z-index: 1;
   right: 0;
   top: 0;
-  background-color: red;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .parent_msg:hover .control {
+  display: inline-block;
+}
+
+.child_msg:hover .control {
   display: inline-block;
 }

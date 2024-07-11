@@ -93,6 +93,10 @@ app.get("/", async (request, response) => {
           return "";
         }
       }
+    ).replace(
+      "<!-- control panel -->",
+      `<button class="reply_button" onclick="change_msg(${msg.message})">返信</button>`
+      +`<button class="add_stamp" onclick="open_stamps()">スタンプ</button>`
     )
   ).join("");
   
@@ -125,6 +129,9 @@ app.get("/", async (request, response) => {
       }
       return stamp_spans;
     }
+  ).replace(
+    "<!-- control panel -->",
+    `<button class="add_stamp" onclick="open_stamps()">スタンプ</button>`
   );
 
   if (all_thread_msg[0].reply > 0) {
@@ -158,6 +165,9 @@ app.get("/", async (request, response) => {
         }
         return stamp_spans;
       }
+    ).replace(
+      "<!-- control panel -->",
+      `<button class="add_stamp" onclick="open_stamps()">スタンプ</button>`
     )
   ).join("");
 
