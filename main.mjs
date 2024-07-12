@@ -14,13 +14,15 @@ const prisma = new PrismaClient();
 var current_channel = 1;
 var current_message = Array(10); //適当
 current_message.fill(0);
-var name = "akema";
+var member_id = 1;
 
 const template = fs.readFileSync("./template.html", "utf-8");
 const template_main_msg = fs.readFileSync("./main_message.html", "utf8");
 const template_thread_msg = fs.readFileSync("./thread_message.html", "utf-8");
 
 app.get("/", async (request, response) => {
+  var all_members = await prisma.member.findMany();
+  all_members = quicksort(0, all_members.length - 1, all_members);
   var all_channels = await prisma.channel.findMany();
   all_channels = quicksort(0, all_channels.length - 1, all_channels);
 
@@ -61,7 +63,7 @@ app.get("/", async (request, response) => {
       msg.message
     ).replace(
       "<!-- member -->",
-      msg.name
+      all_members[msg.member_id - 1].name
     ).replace(
       "<!-- sentTime -->",
       msg.sentTime.toLocaleString()
@@ -106,7 +108,7 @@ app.get("/", async (request, response) => {
     all_thread_msg[0].message
   ).replace(
     "<!-- member -->",
-    all_thread_msg[0].name
+    all_members[all_thread_msg[0].member_id - 1].name
   ).replace(
     "<!-- sentTime -->",
     all_thread_msg[0].sentTime.toLocaleString()
@@ -142,7 +144,7 @@ app.get("/", async (request, response) => {
   thread_msgs += all_thread_msg.map( (msg) =>
     template_thread_msg.replace(
       "<!-- member -->",
-      msg.name
+      all_members[msg.member_id - 1].name
     ).replace(
       "<!-- sentTime -->",
       msg.sentTime.toLocaleString()
@@ -202,7 +204,7 @@ app.post("/send_main", async (request, response) => {
       channel: current_channel,
       message: message_num,
       thread: 0,
-      name: name,
+      member_id: member_id,
       text: request.body.message,
       stamps: [],
       reply: 0,
@@ -225,7 +227,7 @@ app.post("/send_thread", async (request, response) => {
       channel: current_channel,
       message: current_message[current_channel - 1],
       thread: message_num,
-      name: name,
+      member_id: member_id,
       text: request.body.message,
       stamps: [],
       reply: 0,

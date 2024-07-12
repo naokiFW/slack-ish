@@ -17,7 +17,7 @@ model Msg {
   message   Int
   thread    Int
   sentTime  DateTime  @default(now())
-  name      String 
+  member_id Int 
   text      String
   stamps    Int[]
   reply     Int
