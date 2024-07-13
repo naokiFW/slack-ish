@@ -15,6 +15,7 @@ var current_channel = 1;
 var current_message = Array(10); //適当
 current_message.fill(0);
 var member_id = 1;
+var stamp_box_enable = false;
 
 const template = fs.readFileSync("./template.html", "utf-8");
 const template_main_msg = fs.readFileSync("./main_message.html", "utf8");
@@ -98,7 +99,7 @@ app.get("/", async (request, response) => {
     ).replace(
       "<!-- control panel -->",
       `<button class="reply_button" onclick="change_msg(${msg.message})">返信</button>`
-      +`<button class="add_stamp" onclick="open_stamps()">スタンプ</button>`
+      +`<button class="add_stamp" onclick="open_stamps(${msg.message}, ${msg.thread})">スタンプ</button>`
     )
   ).join("");
   
@@ -133,7 +134,7 @@ app.get("/", async (request, response) => {
     }
   ).replace(
     "<!-- control panel -->",
-    `<button class="add_stamp" onclick="open_stamps()">スタンプ</button>`
+    `<button class="add_stamp" onclick="open_stamps(${all_thread_msg[0].message}, 0)">スタンプ</button>`
   );
 
   if (all_thread_msg[0].reply > 0) {
@@ -169,11 +170,20 @@ app.get("/", async (request, response) => {
       }
     ).replace(
       "<!-- control panel -->",
-      `<button class="add_stamp" onclick="open_stamps()">スタンプ</button>`
+      `<button class="add_stamp" onclick="open_stamps(${msg.message}, ${msg.thread})">スタンプ</button>`
     )
   ).join("");
 
   const html = template.replace(
+    "<!-- stamp_box_enable -->",
+    () => {
+      if (stamp_box_enable) {
+        return "inline-box";
+      } else {
+        return "none";
+      }
+    }
+  ).replace(
     "<!-- channels -->",
     all_channels.map( (channel) =>
       `<button class="ch" onclick="change_ch(${channel.id})">#${channel.name}</button>`
@@ -256,6 +266,24 @@ app.post("/change_ch", (request, response) => {
 
 app.post("/change_msg", (request, response) => {
   current_message[current_channel - 1] = Number(request.body.msg_id);
+  response.redirect("/");
+});
+
+// stamp
+var stamp_ch = current_channel;
+var stamp_msg = current_message;
+var stamp_thr = 0;
+
+app.post("/open_stamp_box", (request, response) => {
+  stamp_ch = current_channel;
+  stamp_msg = request.body.msg_id;
+  stamp_thr = request.body.thr_id;
+  stamp_box_enable = true;
+  response.redirect("/");
+});
+
+app.get("/close_stamp_box", (request, response) => {
+  stamp_box_enable = false;
   response.redirect("/");
 });
 

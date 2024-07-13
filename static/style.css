@@ -124,7 +124,7 @@ html, body {
 }
 
 .stamp_box {
-  display: none;
+  /* display: none; */
   position: fixed;
   top: 30%;
   left: 35%;
