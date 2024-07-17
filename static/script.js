@@ -90,3 +90,9 @@ function close_stamps() {
 
   form.submit();
 }
+
+window.addEventListener("keydown", (e) => {
+  if (!edit_main && !edit_thread && e.key === "Escape") {
+    close_stamps();
+  }
+});
