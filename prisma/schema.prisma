@@ -25,7 +25,7 @@ model Msg {
 
 model Stamp {
   id    Int     @id @default(autoincrement())
-  name  String
+  name  String  @unique
 }
 
 model Channel {

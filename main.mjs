@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import escapeHTML from "escape-html";
 import { channel } from "node:diagnostics_channel";
 import { quicksort } from "./sort.mjs";
+import { request } from "node:http";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -284,6 +285,17 @@ app.post("/open_stamp_box", (request, response) => {
 
 app.get("/close_stamp_box", (request, response) => {
   stamp_box_enable = false;
+  response.redirect("/");
+});
+
+app.get("/stamp_list_update", async (request, response) => {
+  const stamp_imgs = fs.readdirSync("./static/stamp/");
+  await prisma.stamp.createMany({
+    data: stamp_imgs.map((img) => ({
+      name: img.split(".")[0]
+    })),
+    skipDuplicates: true,
+  });
   response.redirect("/");
 });
 
