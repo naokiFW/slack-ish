@@ -1,7 +1,22 @@
-const messageInput = document.getElementById("message-input");
+const mainInput = document.getElementById("main-input");
+const threadInput = document.getElementById("thread-input");
+var edit_main = false;
+var edit_thread = false;
+mainInput.onfocus = () => {
+  edit_main = true;
+}
+threadInput.onfocus = () => {
+  edit_thread = true;
+}
+mainInput.onblur = () => {
+  edit_main = false;
+}
+threadInput.onblur = () => {
+  edit_thread = false;
+}
 
 setInterval(() => {
-  if (messageInput.value === "") {
+  if (!edit_main && !edit_thread) {
     window.location.reload();
   }
 }, 5 * 1000);
