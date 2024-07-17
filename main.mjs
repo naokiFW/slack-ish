@@ -27,6 +27,8 @@ app.get("/", async (request, response) => {
   all_members = quicksort(0, all_members.length - 1, all_members);
   var all_channels = await prisma.channel.findMany();
   all_channels = quicksort(0, all_channels.length - 1, all_channels);
+  var all_stamps = await prisma.stamp.findMany();
+  all_stamps = quicksort(0, all_stamps.length - 1, all_stamps);
 
   var all_main_msg = await prisma.msg.findMany({
     where: {
@@ -79,12 +81,12 @@ app.get("/", async (request, response) => {
         var stamp_exitst = false;
         for (let i = 0; i < 32; i++) {
           if (msg.stamps[i] > 0) {
-            stamp_spans += `<span class="stamp"><img class="stamp_img" src="./images/stamp${i}"/> ${img.stamps[i]}</span>`;
+            stamp_spans += `<span class="stamp"><img class="stamp_img" src="/stamp/${all_stamps[i].name}.png"/> ${msg.stamps[i]}</span>`;
             stamp_exitst = true;
           }
         }
         if (stamp_exitst) {
-          stamp_spans += `<button class="add_stamp">+</button>`;
+          stamp_spans += `<button class="add_stamp" onclick="open_stamps(${msg.message}, ${msg.thread})">+</button>`;
         }
         return stamp_spans;
       }
@@ -124,12 +126,12 @@ app.get("/", async (request, response) => {
       var stamp_exitst = false;
       for (let i = 0; i < 32; i++) {
         if (all_thread_msg[0].stamps[i] > 0) {
-          stamp_spans += `<span class="stamp"><img class="stamp_img" src="./images/stamp${i}"/> ${img.stamps[i]}</span>`;
+          stamp_spans += `<span class="stamp"><img class="stamp_img" src="/stamp/${all_stamps[i].name}.png"/> ${all_thread_msg[0].stamps[i]}</span>`;
           stamp_exitst = true;
         }
       }
       if (stamp_exitst) {
-        stamp_spans += `<button class="add_stamp">+</button>`;
+        stamp_spans += `<button class="add_stamp" onclick="open_stamps(${all_thread_msg[0].message}, 0)">+</button>`;
       }
       return stamp_spans;
     }
@@ -160,12 +162,12 @@ app.get("/", async (request, response) => {
         var stamp_exitst = false;
         for (let i = 0; i < 32; i++) {
           if (msg.stamps[i] > 0) {
-            stamp_spans += `<span class="stamp"><img class="stamp_img" src="./images/stamp${i}"/> ${img.stamps[i]}</span>`;
+            stamp_spans += `<span class="stamp"><img class="stamp_img" src="/stamp/${all_stamps[i].name}.png"/> ${msg.stamps[i]}</span>`;
             stamp_exitst = true;
           }
         }
         if (stamp_exitst) {
-          stamp_spans += `<button class="add_stamp">+</button>`;
+          stamp_spans += `<button class="add_stamp" onclick="open_stamps(${msg.message}, ${msg.thread})">+</button>`;
         }
         return stamp_spans;
       }
@@ -288,6 +290,8 @@ app.get("/close_stamp_box", (request, response) => {
   response.redirect("/");
 });
 
+//スタンプ追加
+//static/stamp/に`スタンプ名.png`を置いて、/stamp_list_updateにアクセスすると追加できる
 app.get("/stamp_list_update", async (request, response) => {
   const stamp_imgs = fs.readdirSync("./static/stamp/");
   await prisma.stamp.createMany({

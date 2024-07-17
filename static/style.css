@@ -89,6 +89,9 @@ html, body {
   font-size: x-small;
 }
 
+.stamp_img {
+  width: 1.5em;
+}
 .reply {
   font-family: sans-serif;
   font-size: small;
