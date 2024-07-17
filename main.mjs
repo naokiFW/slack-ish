@@ -81,7 +81,7 @@ app.get("/", async (request, response) => {
         var stamp_exitst = false;
         for (let i = 0; i < 32; i++) {
           if (msg.stamps[i] > 0) {
-            stamp_spans += `<span class="stamp"><img class="stamp_img" src="/stamp/${all_stamps[i].name}.png"/> ${msg.stamps[i]}</span>`;
+            stamp_spans += `<button class="stamp"><img class="stamp_img" src="/stamp/${all_stamps[i].name}.png"/> ${msg.stamps[i]}</button>`;
             stamp_exitst = true;
           }
         }
@@ -102,7 +102,7 @@ app.get("/", async (request, response) => {
     ).replace(
       "<!-- control panel -->",
       `<button class="reply_button" onclick="change_msg(${msg.message})">返信</button>`
-      +`<button class="add_stamp" onclick="open_stamps(${msg.message}, ${msg.thread})">スタンプ</button>`
+      +`<button class="c_add_stamp" onclick="open_stamps(${msg.message}, ${msg.thread})">スタンプ</button>`
     )
   ).join("");
   
@@ -126,7 +126,7 @@ app.get("/", async (request, response) => {
       var stamp_exitst = false;
       for (let i = 0; i < 32; i++) {
         if (all_thread_msg[0].stamps[i] > 0) {
-          stamp_spans += `<span class="stamp"><img class="stamp_img" src="/stamp/${all_stamps[i].name}.png"/> ${all_thread_msg[0].stamps[i]}</span>`;
+          stamp_spans += `<button class="stamp"><img class="stamp_img" src="/stamp/${all_stamps[i].name}.png"/> ${all_thread_msg[0].stamps[i]}</button>`;
           stamp_exitst = true;
         }
       }
@@ -137,7 +137,7 @@ app.get("/", async (request, response) => {
     }
   ).replace(
     "<!-- control panel -->",
-    `<button class="add_stamp" onclick="open_stamps(${all_thread_msg[0].message}, 0)">スタンプ</button>`
+    `<button class="c_add_stamp" onclick="open_stamps(${all_thread_msg[0].message}, 0)">スタンプ</button>`
   );
 
   if (all_thread_msg[0].reply > 0) {
@@ -162,7 +162,7 @@ app.get("/", async (request, response) => {
         var stamp_exitst = false;
         for (let i = 0; i < 32; i++) {
           if (msg.stamps[i] > 0) {
-            stamp_spans += `<span class="stamp"><img class="stamp_img" src="/stamp/${all_stamps[i].name}.png"/> ${msg.stamps[i]}</span>`;
+            stamp_spans += `<button class="stamp"><img class="stamp_img" src="/stamp/${all_stamps[i].name}.png"/> ${msg.stamps[i]}</button>`;
             stamp_exitst = true;
           }
         }
@@ -173,7 +173,7 @@ app.get("/", async (request, response) => {
       }
     ).replace(
       "<!-- control panel -->",
-      `<button class="add_stamp" onclick="open_stamps(${msg.message}, ${msg.thread})">スタンプ</button>`
+      `<button class="c_add_stamp" onclick="open_stamps(${msg.message}, ${msg.thread})">スタンプ</button>`
     )
   ).join("");
 
